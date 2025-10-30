@@ -3,9 +3,12 @@ from django.contrib.auth.models import User
 
 from .models import Snippet
 from .serializers import SnippetSerializer, UserSerializer
+from rest_framework import permissions
 
 
 class SnippetList(generics.ListCreateAPIView):
+   permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
    queryset = Snippet.objects.all()
    serializer_class = SnippetSerializer
 
@@ -13,8 +16,11 @@ class SnippetList(generics.ListCreateAPIView):
       serializer.save(owner=self.request.user)
 
 class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
+   permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
    queryset = Snippet.objects.all()
    serializer_class = SnippetSerializer
+
 
 class UserList(generics.ListAPIView):
    queryset = User.objects.all()
